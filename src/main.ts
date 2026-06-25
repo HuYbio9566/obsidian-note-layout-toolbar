@@ -1227,7 +1227,7 @@ export default class ContentWidthControlPlugin extends Plugin {
 
     const panelEl = document.body.createDiv({ cls: "layout-toolbar-dropdown-panel layout-toolbar-table-panel" });
     panelEl.addEventListener("mousedown", (event) => event.preventDefault());
-    this.addDropdownItem(panelEl, "调整单元格", "sliders-horizontal", true, () => this.toggleTableResizeMode());
+    this.addDropdownItem(panelEl, "调整单元格", "sliders-horizontal", this.tableResizeMode, () => this.toggleTableResizeMode());
     this.addDropdownItem(panelEl, "均分列宽", "columns-3", false, () => this.distributeTableColumnsEvenly());
     panelEl.createDiv({ cls: "layout-toolbar-dropdown-divider" });
     this.addDropdownItem(panelEl, "左对齐", "align-left", false, () => this.applyTableCellTextAlign("left"));
@@ -1239,7 +1239,6 @@ export default class ContentWidthControlPlugin extends Plugin {
     this.addDropdownItem(panelEl, "底部对齐", "arrow-down", false, () => this.applyTableCellVerticalAlign("bottom"));
 
     this.tableMenuPanelEl = panelEl;
-    this.tableResizeButtonEl?.addClass("is-active");
     if (this.tableChevronEl) {
       this.tableChevronEl.empty();
       setIcon(this.tableChevronEl, "chevron-up");
