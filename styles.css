@@ -13,15 +13,34 @@ body.content-width-control-enabled .markdown-source-view.mod-cm6.is-readable-lin
   margin-right: auto !important;
 }
 
-body.content-width-control-enabled .markdown-source-view.mod-cm6.is-readable-line-width .cm-content,
+body.content-width-control-enabled .markdown-source-view.mod-cm6.is-readable-line-width .cm-contentContainer,
+body.content-width-control-enabled .markdown-source-view.mod-cm6.is-readable-line-width .cm-content {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  width: 100%;
+}
+
 body.content-width-control-enabled .markdown-source-view.mod-cm6.is-readable-line-width .cm-line {
   max-width: none !important;
-  width: auto;
+  min-width: 0 !important;
+  width: 100%;
 }
 
 body.content-width-control-enabled :is(.markdown-preview-view table, .markdown-rendered table, .markdown-source-view.mod-cm6 table) {
   width: 100% !important;
   max-width: 100%;
+}
+
+body.content-width-control-enabled .markdown-source-view.mod-cm6 :is(table, th, td) {
+  table-layout: fixed;
+  max-width: 100%;
+  min-width: 0 !important;
+}
+
+body.content-width-control-enabled .markdown-source-view.mod-cm6 :is(th, td, th *, td *) {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
 }
 
 body.content-width-control-enabled[style*="--content-width-control-heading-text"] :is(.markdown-preview-view h1, .markdown-preview-view h2, .markdown-preview-view h3, .markdown-preview-view h4, .markdown-preview-view h5, .markdown-preview-view h6, .cm-header) {

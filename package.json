@@ -1,6 +1,6 @@
 {
   "name": "obsidian-note-layout-toolbar",
-  "version": "0.7.6",
+  "version": "0.7.7",
   "description": "An Obsidian plugin with a floating toolbar for per-note layout, heading colors, and table formatting.",
   "main": "main.js",
   "scripts": {
