@@ -6,7 +6,7 @@ const prod = process.argv[2] === "production";
 
 const context = await esbuild.context({
   banner: {
-    js: "/* Note Layout Toolbar */"
+    js: "/* Layout Toolbar */"
   },
   entryPoints: ["src/main.ts"],
   bundle: true,

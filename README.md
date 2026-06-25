@@ -1,6 +1,6 @@
-# Note Layout Toolbar
+# Layout Toolbar
 
-Note Layout Toolbar is an Obsidian plugin that adds a compact floating toolbar for page-level layout and table formatting.
+Layout Toolbar is an Obsidian plugin that adds a compact floating toolbar for page-level layout and table formatting.
 
 It is designed for people who want notes to feel more like editable documents: quickly adjust the current note width, color headings, color selected table cells, align selected cells, and resize table rows or columns without changing every note globally.
 
@@ -62,7 +62,7 @@ YourVault/.obsidian/plugins/note-layout-toolbar/
 ```
 
 3. Put the three downloaded files into that folder.
-4. In Obsidian, open `Settings -> Community plugins`, then enable `Note Layout Toolbar`.
+4. In Obsidian, open `Settings -> Community plugins`, then enable `Layout Toolbar`.
 
 ## Development
 
