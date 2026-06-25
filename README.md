@@ -15,6 +15,7 @@ It is designed for people who want notes to feel more like editable documents: q
 - Per-note persistence for floating toolbar changes.
 - Global defaults in the plugin settings page for content width, heading colors, table width, and table row spacing.
 - Undo support for the plugin's latest formatting operation with `Command+Z` on macOS.
+- Desktop-only behavior, because the toolbar is built around mouse hover, text selection, and table edge dragging.
 
 ## Important behavior
 

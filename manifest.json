@@ -5,5 +5,5 @@
   "minAppVersion": "1.5.0",
   "description": "A floating toolbar for per-note layout, heading colors, and table formatting.",
   "author": "HuYbio9566",
-  "isDesktopOnly": false
+  "isDesktopOnly": true
 }
