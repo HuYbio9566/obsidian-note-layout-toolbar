@@ -13,6 +13,8 @@ interface ContentWidthSettings {
   pageTables: Record<string, PageTableSettings>;
   tableWidthPercent: number;
   tableRowSpacing: TableRowSpacing;
+  tableCellSizing: TableCellSizing;
+  tableHeaderStyle: TableHeaderStyle;
 }
 
 type PageColorSettings = {
@@ -46,6 +48,8 @@ type TableCellStyle = {
 };
 
 type TableRowSpacing = "default" | "compact" | "regular" | "loose";
+type TableCellSizing = "default" | "even";
+type TableHeaderStyle = "default" | "gray" | "black" | "light-blue" | "dark-blue";
 
 const DEFAULT_SETTINGS: ContentWidthSettings = {
   enabled: true,
@@ -59,7 +63,9 @@ const DEFAULT_SETTINGS: ContentWidthSettings = {
   pageLayouts: {},
   pageTables: {},
   tableWidthPercent: 0,
-  tableRowSpacing: "default"
+  tableRowSpacing: "default",
+  tableCellSizing: "default",
+  tableHeaderStyle: "default"
 };
 
 const BODY_CLASS = "layout-toolbar-enabled";
@@ -70,6 +76,8 @@ const HEADING_BACKGROUND_COLOR_VAR = "--layout-toolbar-heading-background";
 const TABLE_CELL_BACKGROUND_VAR = "--layout-toolbar-cell-background";
 const TABLE_WIDTH_VAR = "--layout-toolbar-table-width";
 const TABLE_ROW_SPACING_VAR = "--layout-toolbar-table-row-spacing";
+const TABLE_CELL_SIZING_CLASS_PREFIX = "layout-toolbar-table-cells-";
+const TABLE_HEADER_STYLE_CLASS_PREFIX = "layout-toolbar-table-header-";
 const TOOLBAR_CLASS = "layout-toolbar-toolbar";
 const PAGE_COLOR_SCOPE_CLASS = "layout-toolbar-page-color-scope";
 const TABLE_RESIZE_MODE_CLASS = "layout-toolbar-table-resize-mode";
@@ -87,6 +95,17 @@ const TABLE_ROW_SPACING_OPTIONS: { id: TableRowSpacing; label: string; padding: 
   { id: "compact", label: "紧凑", padding: 4 },
   { id: "regular", label: "常规", padding: 12 },
   { id: "loose", label: "宽松", padding: 20 }
+];
+const TABLE_CELL_SIZING_OPTIONS: { id: TableCellSizing; label: string }[] = [
+  { id: "default", label: "默认" },
+  { id: "even", label: "均分列宽" }
+];
+const TABLE_HEADER_STYLE_OPTIONS: { id: TableHeaderStyle; label: string }[] = [
+  { id: "default", label: "默认无颜色" },
+  { id: "gray", label: "灰色黑字" },
+  { id: "black", label: "黑色白字" },
+  { id: "light-blue", label: "浅蓝色黑字" },
+  { id: "dark-blue", label: "深蓝色白字" }
 ];
 const WIDTH_OPTIONS = [50, 60, 70, 80, 90, 100];
 const TEXT_COLORS = [
@@ -191,6 +210,7 @@ export default class ContentWidthControlPlugin extends Plugin {
     document.body.style.removeProperty(TABLE_CELL_BACKGROUND_VAR);
     document.body.style.removeProperty(TABLE_WIDTH_VAR);
     document.body.style.removeProperty(TABLE_ROW_SPACING_VAR);
+    this.clearTableGlobalClasses();
     this.clearHeadingPaletteClasses();
     this.headingPanelEl?.remove();
     this.cellBackgroundPanelEl?.remove();
@@ -221,6 +241,8 @@ export default class ContentWidthControlPlugin extends Plugin {
     this.settings.pageColors = this.settings.pageColors ?? {};
     this.settings.pageLayouts = this.settings.pageLayouts ?? {};
     this.settings.pageTables = this.settings.pageTables ?? {};
+    this.settings.tableCellSizing = this.settings.tableCellSizing ?? "default";
+    this.settings.tableHeaderStyle = this.settings.tableHeaderStyle ?? "default";
     if (!this.settings.tableRowSpacing) {
       const legacySettings = this.settings as ContentWidthSettings & { tableRowHeight?: number };
       this.settings.tableRowSpacing = legacySettings.tableRowHeight && legacySettings.tableRowHeight > 0 ? "regular" : "default";
@@ -369,7 +391,27 @@ export default class ContentWidthControlPlugin extends Plugin {
     } else {
       document.body.style.removeProperty(TABLE_ROW_SPACING_VAR);
     }
+    this.applyTableGlobalClasses();
     this.clearHeadingPaletteClasses();
+  }
+
+  clearTableGlobalClasses() {
+    TABLE_CELL_SIZING_OPTIONS.forEach((option) => {
+      document.body.removeClass(`${TABLE_CELL_SIZING_CLASS_PREFIX}${option.id}`);
+    });
+    TABLE_HEADER_STYLE_OPTIONS.forEach((option) => {
+      document.body.removeClass(`${TABLE_HEADER_STYLE_CLASS_PREFIX}${option.id}`);
+    });
+  }
+
+  applyTableGlobalClasses() {
+    this.clearTableGlobalClasses();
+    if (this.settings.tableCellSizing !== "default") {
+      document.body.addClass(`${TABLE_CELL_SIZING_CLASS_PREFIX}${this.settings.tableCellSizing}`);
+    }
+    if (this.settings.tableHeaderStyle !== "default") {
+      document.body.addClass(`${TABLE_HEADER_STYLE_CLASS_PREFIX}${this.settings.tableHeaderStyle}`);
+    }
   }
 
   getColorValue(colors: { id: string; value: string }[], id: string) {
@@ -1710,6 +1752,40 @@ class ContentWidthSettingTab extends PluginSettingTab {
           .onChange(async (value) => {
             this.plugin.pushUndoSnapshot();
             this.plugin.settings.tableRowSpacing = value as TableRowSpacing;
+            await this.plugin.saveSettings();
+          });
+      });
+
+    new Setting(containerEl)
+      .setName("调整单元格")
+      .setDesc("设置全局表格单元格宽度。默认不修改；均分列宽会让表格所有列平均分配整体宽度。")
+      .addDropdown((dropdown) => {
+        TABLE_CELL_SIZING_OPTIONS.forEach((option) => {
+          dropdown.addOption(option.id, option.label);
+        });
+
+        dropdown
+          .setValue(this.plugin.settings.tableCellSizing)
+          .onChange(async (value) => {
+            this.plugin.pushUndoSnapshot();
+            this.plugin.settings.tableCellSizing = value as TableCellSizing;
+            await this.plugin.saveSettings();
+          });
+      });
+
+    new Setting(containerEl)
+      .setName("表头背景色")
+      .setDesc("设置全局表格表头样式。默认无颜色；其余选项会同时设置表头背景和文字颜色。")
+      .addDropdown((dropdown) => {
+        TABLE_HEADER_STYLE_OPTIONS.forEach((option) => {
+          dropdown.addOption(option.id, option.label);
+        });
+
+        dropdown
+          .setValue(this.plugin.settings.tableHeaderStyle)
+          .onChange(async (value) => {
+            this.plugin.pushUndoSnapshot();
+            this.plugin.settings.tableHeaderStyle = value as TableHeaderStyle;
             await this.plugin.saveSettings();
           });
       });

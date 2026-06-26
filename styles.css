@@ -153,6 +153,36 @@ body.layout-toolbar-enabled[style*="--layout-toolbar-table-row-spacing"] :is(.ma
   background-color: var(--layout-toolbar-cell-background);
 }
 
+body.layout-toolbar-enabled.layout-toolbar-table-cells-even :is(.markdown-preview-view table, .markdown-rendered table, .markdown-source-view.mod-cm6 table) {
+  table-layout: fixed !important;
+  width: 100% !important;
+}
+
+body.layout-toolbar-enabled.layout-toolbar-table-cells-even :is(.markdown-preview-view th, .markdown-preview-view td, .markdown-rendered th, .markdown-rendered td, .markdown-source-view.mod-cm6 th, .markdown-source-view.mod-cm6 td) {
+  width: auto !important;
+  min-width: 0 !important;
+}
+
+body.layout-toolbar-enabled.layout-toolbar-table-header-gray :is(.markdown-preview-view th, .markdown-rendered th, .markdown-source-view.mod-cm6 th) {
+  color: #202124 !important;
+  background-color: #f0f1f3 !important;
+}
+
+body.layout-toolbar-enabled.layout-toolbar-table-header-black :is(.markdown-preview-view th, .markdown-rendered th, .markdown-source-view.mod-cm6 th) {
+  color: #ffffff !important;
+  background-color: #202124 !important;
+}
+
+body.layout-toolbar-enabled.layout-toolbar-table-header-light-blue :is(.markdown-preview-view th, .markdown-rendered th, .markdown-source-view.mod-cm6 th) {
+  color: #202124 !important;
+  background-color: #dbeafe !important;
+}
+
+body.layout-toolbar-enabled.layout-toolbar-table-header-dark-blue :is(.markdown-preview-view th, .markdown-rendered th, .markdown-source-view.mod-cm6 th) {
+  color: #ffffff !important;
+  background-color: #1d4ed8 !important;
+}
+
 .layout-toolbar-toolbar {
   position: fixed;
   z-index: 9999;
